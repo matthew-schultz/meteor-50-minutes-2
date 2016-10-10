@@ -7,6 +7,8 @@
 Tasks = new Mongo.Collection('tasks');
 
 if (Meteor.isClient) {
+  Meteor.subscribe('tasks');
+
   // alert("Meteor is Client");
   Template.tasks.helpers({
     tasks: function(){
@@ -34,6 +36,13 @@ if (Meteor.isClient) {
     }
   });
 }
+
+if (Meteor.isServer) {
+  Meteor.publish('tasks', function(){
+    return Tasks.find({userId: this.userId});
+  });
+}
+
 
 Meteor.methods({
   addTask: function(name){
